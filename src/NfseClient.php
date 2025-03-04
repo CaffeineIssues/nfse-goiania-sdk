@@ -1,6 +1,8 @@
 <?php
+require('services/CertificateService.php');
+require('services/NfseService.php');
 
-class Client
+class NfseClient
 {
     private $certificado;
     private $homologacao;
@@ -11,19 +13,29 @@ class Client
         $this->homologacao = isset($config['homologacao']) ? (bool) $config['homologacao'] : true;
         
         $this->inicializar();
+        
+
+      
     }
 
     private function inicializar()
     {
-        if (!file_exists($this->certificado)) {
+        if (!$this->certificado) {
             throw new \Exception("Certificado não encontrado: {$this->certificado}");
         }
+       // $signatureService = new SignatureService($base64Pem, $password);
+       $this->generateNfse = new NfseService();
+    
+       $this->generateNfse->gerar();
+    
 
-        // Aqui você pode carregar o certificado, criar uma conexão segura, etc.
+        
     }
 
     public function getAmbiente()
     {
-        return $this->homologacao ? 'Homologação' : 'Produção';
+        return $this->homologacao ? 'hom' : 'prod';
     }
+
+   
 }
