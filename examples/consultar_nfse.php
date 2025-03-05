@@ -8,5 +8,3 @@ $config = [
 ];
 
 $client = new NfseClient($config);
-
-echo $client->getAmbiente(); // hom

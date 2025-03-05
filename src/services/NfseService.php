@@ -1,9 +1,60 @@
 <?php
 
 class NfseService{
-    
 
- public function gerar(
+    private function NfseWSReq($wsdlUrl, $soapAction, $soapRequest){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $wsdlUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $soapRequest);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: text/xml; charset=utf-8",
+            "SOAPAction: \"$soapAction\"",
+            "Content-Length: " . strlen($soapRequest),
+        ]);
+
+   
+        $response = curl_exec($ch);
+        $json_response;
+   
+
+        if (curl_errno($ch)) {
+            echo 'cURL Error: ' . curl_error($ch);
+        } else {
+            
+            $response_headers = curl_getinfo($ch);
+            if($response_headers['http_code'] == 400){
+                $json_response =  json_encode(["error" => "Erro ao gerar NFSe", "message" => "requisição invalida(possivel erro no xml enviado)", "status" => 400]);
+               
+                return $json_response;
+            }
+            if($response_headers['http_code'] == 500){
+                $json_response =  json_encode(["error" => "Erro ao gerar NFSe", "message" => "Erro interno no servidor", "status" => 500]);
+              
+                return $json_response;
+            }
+       
+            $doc = new DOMDocument();
+            $doc->loadXML($response);
+            // Get the XML root node
+            $root = $doc->documentElement;
+            $responseContent = $root->nodeValue;
+            $json_response = [];
+            foreach ($root->childNodes as $node) {
+                $json_response[$node->nodeName] = $node->nodeValue;
+            }
+            $json_response = $json_response['soap:Body'];
+           
+            $xmlObject = simplexml_load_string($json_response);
+            $generateNfseResponse = json_decode(json_encode($xmlObject));
+            
+            return($generateNfseResponse);        
+        }
+
+        curl_close($ch);
+    }
+    public function gerar(
         /*$rpsNumero,
         $rpsSerie,
         $rpsTipo,
@@ -38,45 +89,7 @@ class NfseService{
         // SOAP Action
         $soapAction = "http://nfse.goiania.go.gov.br/ws/GerarNfse";
 
-        // RPS Data
-        $rpsNumero = "18";
-        $rpsSerie = "UNICA";
-        $rpsTipo = "1";
-        $dataEmissao = "2011-11-16T00:00:00";
-        $rpsStatus = "1";
-
-        // Service Values
-        $valorServicos = "2000.00";
-        $valorPis = "40.50";
-        $valorCofins = "20.00";
-        $valorInss = "10.50";
-        $valorCsll = "30.00";
-
-        // Taxation and Description
-        $codigoTributacaoMunicipio = "551080100";
-        $discriminacao = "TESTE DE WEBSERVICE RETIDO";
-        $codigoMunicipio = "2530000";
-
-        // Provider (Prestador)
-        $cpfPrestador = "24329550130";
-        $inscricaoMunicipalPrestador = "1300687";
-
-        // Customer (Tomador)
-        $cnpjTomador = "06926334000177";
-        $inscricaoMunicipalTomador = "2118513";
-        $razaoSocialTomador = "GRAMADO EMPREENDIMENTOS";
-
-        // Address
-        $endereco = "RUA 3";
-        $numero = "1003";
-        $complemento = "1003";
-        $bairro = "CAPUAVA";
-        $uf = "GO";
-
-        // XML Signature (Dummy Data)
-        $digestValue = "Rx/dhFhnjN/6mxk02LrNmpvM5lU=";
-        $signatureValue = "Y3UQi0Q4GKEuhGejjl44TSlXG6JZ4OPrVS...";
-        $x509Certificate = "MIIF1zCCBL+gAwIBAgIQMjAxMDA4MTMxODQwMjc5OTAN...";
+       
 
         // XML Data (Dynamic)
         $xmlData = 
@@ -169,58 +182,9 @@ class NfseService{
                 </soap12:Body>
             </soap12:Envelope>
         SOAP;
-
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $wsdlUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $soapRequest);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "Content-Type: text/xml; charset=utf-8",
-            "SOAPAction: \"$soapAction\"",
-            "Content-Length: " . strlen($soapRequest),
-        ]);
-
-   
-        $response = curl_exec($ch);
-        $json_response;
-   
-
-        if (curl_errno($ch)) {
-            echo 'cURL Error: ' . curl_error($ch);
-        } else {
             
-            $response_headers = curl_getinfo($ch);
-            if($response_headers['http_code'] == 400){
-                $json_response =  json_encode(["error" => "Erro ao gerar NFSe", "message" => "requisição invalida(possivel erro no xml enviado)", "status" => 400]);
-                echo $json_response;
-                return $json_response;
-            }
-            if($response_headers['http_code'] == 500){
-                $json_response =  json_encode(["error" => "Erro ao gerar NFSe", "message" => "Erro interno no servidor", "status" => 500]);
-                echo $json_response;
-                return $json_response;
-            }
-       
-            $doc = new DOMDocument();
-            $doc->loadXML($response);
-            // Get the XML root node
-            $root = $doc->documentElement;
-            $responseContent = $root->nodeValue;
-            $json_response = [];
-            foreach ($root->childNodes as $node) {
-                $json_response[$node->nodeName] = $node->nodeValue;
-            }
-            $json_response = $json_response['soap:Body'];
-           
-            $xmlObject = simplexml_load_string($json_response);
-            $generateNfseResponse = json_decode(json_encode($xmlObject));
-            
-            return($generateNfseResponse);        
-        }
-        
-        curl_close($ch);
+        $response = $this->NfseWSReq($wsdlUrl, $soapAction, $soapRequest);
+        return $response;
     }
     public function consultar(){
         echo "Consultar NFSe";
