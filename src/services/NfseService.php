@@ -154,7 +154,6 @@ class NfseService{
                             </GerarNfseEnvio>
         XML;
 
-        // SOAP Envelope
         $soapRequest = 
         <<<SOAP
         <?xml version="1.0" encoding="UTF-8"?>
@@ -171,10 +170,8 @@ class NfseService{
             </soap12:Envelope>
         SOAP;
 
-        // Setup cURL
+
         $ch = curl_init();
-        echo  $soapRequest;
-        // cURL options
         curl_setopt($ch, CURLOPT_URL, $wsdlUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -185,11 +182,11 @@ class NfseService{
             "Content-Length: " . strlen($soapRequest),
         ]);
 
-        // Execute cURL
+   
         $response = curl_exec($ch);
         $json_response;
-       // echo $response;
-        // Check for errors
+   
+
         if (curl_errno($ch)) {
             echo 'cURL Error: ' . curl_error($ch);
         } else {
@@ -216,12 +213,13 @@ class NfseService{
                 $json_response[$node->nodeName] = $node->nodeValue;
             }
             $json_response = $json_response['soap:Body'];
-            print_r($json_response);
+           
             $xmlObject = simplexml_load_string($json_response);
-            return($xmlObject);        
+            $generateNfseResponse = json_decode(json_encode($xmlObject));
+            
+            return($generateNfseResponse);        
         }
-
-        // Close cURL
+        
         curl_close($ch);
     }
     public function consultar(){
