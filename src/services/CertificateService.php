@@ -58,7 +58,7 @@ class Certificate{
        
 
         
-        print_r($dom->saveXML());
+        //print_r($dom->saveXML());
         return $dom->saveXML();
     } else {
         throw new \Exception("Unable to sign the data.");

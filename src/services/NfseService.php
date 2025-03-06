@@ -3,31 +3,31 @@
 require_once('CertificateService.php');
 
 class Nfse {
-    public int $numero;
-    public string $serie;
-    public int $tipo;
-    public string $dataEmissao;
-    public int $status;
-    public float $valorServicos;
-    public float $valorPis;
-    public float $valorCofins;
-    public float $valorInss;
-    public float $valorCsll;
-    public float $descontoIncondicionado;
-    public int $codigoTributacaoMunicipio;
-    public string $discriminacao;
-    public int $codigoMunicipio;
-    public int $cpfCnpjPrestador;
-    public int $inscricaoMunicipalPrestador;
-    public int $cpfCnpjTomador;
-    public int $inscricaoMunicipalTomador;
-    public string $razaoSocialTomador;
-    public string $enderecoTomador;
-    public int $numeroTomador;
-    public int $complementoTomador;
-    public string $bairroTomador;
-    public int $codigoMunicipioTomador;
-    public string $ufTomador;
+    public  $numero;
+    public  $serie;
+    public  $tipo;
+    public  $dataEmissao;
+    public  $status;
+    public  $valorServicos;
+    public  $valorPis;
+    public  $valorCofins;
+    public  $valorInss;
+    public  $valorCsll;
+    public  $descontoIncondicionado;
+    public  $codigoTributacaoMunicipio;
+    public  $discriminacao;
+    public  $codigoMunicipio;
+    public  $cpfCnpjPrestador;
+    public  $inscricaoMunicipalPrestador;
+    public  $cpfCnpjTomador;
+    public  $inscricaoMunicipalTomador;
+    public  $razaoSocialTomador;
+    public  $enderecoTomador;
+    public  $numeroTomador;
+    public  $complementoTomador;
+    public  $bairroTomador;
+    public  $codigoMunicipioTomador;
+    public  $ufTomador;
 
     public function __construct(array $data) {
         $this->numero = $data['numero'];
