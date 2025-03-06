@@ -49,3 +49,5 @@ $gerarNfse = $client->gerarNfse(
    $dadosNfse
 );
 
+
+//print_r($gerarNfse);
