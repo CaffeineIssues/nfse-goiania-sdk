@@ -1,5 +1,62 @@
 <?php
 
+
+class Nfse {
+    public int $numero;
+    public string $serie;
+    public int $tipo;
+    public string $dataEmissao;
+    public int $status;
+    public float $valorServicos;
+    public float $valorPis;
+    public float $valorCofins;
+    public float $valorInss;
+    public float $valorCsll;
+    public float $descontoIncondicionado;
+    public int $codigoTributacaoMunicipio;
+    public string $discriminacao;
+    public int $codigoMunicipio;
+    public int $cpfCnpjPrestador;
+    public int $inscricaoMunicipalPrestador;
+    public int $cpfCnpjTomador;
+    public int $inscricaoMunicipalTomador;
+    public string $razaoSocialTomador;
+    public string $enderecoTomador;
+    public int $numeroTomador;
+    public int $complementoTomador;
+    public string $bairroTomador;
+    public int $codigoMunicipioTomador;
+    public string $ufTomador;
+
+    public function __construct(array $data) {
+        $this->numero = $data['numero'];
+        $this->serie = $data['serie'];
+        $this->tipo = $data['tipo'];
+        $this->dataEmissao = $data['dataEmissao'];
+        $this->status = $data['status'];
+        $this->valorServicos = $data['valorServicos'];
+        $this->valorPis = $data['valorPis'];
+        $this->valorCofins = $data['valorCofins'];
+        $this->valorInss = $data['valorInss'];
+        $this->valorCsll = $data['valorCsll'];
+        $this->descontoIncondicionado = $data['descontoIncondicionado'];
+        $this->codigoTributacaoMunicipio = $data['codigoTributacaoMunicipio'];
+        $this->discriminacao = $data['discriminacao'];
+        $this->codigoMunicipio = $data['codigoMunicipio'];
+        $this->cpfCnpjPrestador = $data['cpfCnpjPrestador'];
+        $this->inscricaoMunicipalPrestador = $data['inscricaoMunicipalPrestador'];
+        $this->cpfCnpjTomador = $data['cpfCnpjTomador'];
+        $this->inscricaoMunicipalTomador = $data['inscricaoMunicipalTomador'];
+        $this->razaoSocialTomador = $data['razaoSocialTomador'];
+        $this->enderecoTomador = $data['enderecoTomador'];
+        $this->numeroTomador = $data['numeroTomador'];
+        $this->complementoTomador = $data['complementoTomador'];
+        $this->bairroTomador = $data['bairroTomador'];
+        $this->codigoMunicipioTomador = $data['codigoMunicipioTomador'];
+        $this->ufTomador = $data['ufTomador'];
+    }
+}
+
 class NfseService{
 
     private function NfseWSReq($wsdlUrl, $soapAction, $soapRequest){
@@ -55,34 +112,9 @@ class NfseService{
         curl_close($ch);
     }
     public function gerar(
-        /*$rpsNumero,
-        $rpsSerie,
-        $rpsTipo,
-        $dataEmissao,
-        $rpsStatus,
-        $valorServicos,
-        $valorPis,
-        $valorCofins,
-        $valorInss,
-        $valorCsll,
-        $codigoTributacaoMunicipio,
-        $discriminacao,
-        $codigoMunicipio,
-        $cpfPrestador,
-        $inscricaoMunicipalPrestador,
-        $cnpjTomador,
-        $inscricaoMunicipalTomador,
-        $razaoSocialTomador,
-        $endereco,
-        $numero,
-        $complemento,
-        $bairro,
-        $uf,
-        $digestValue,
-        $signatureValue,
-        $x509Certificate*/
+       Nfse $nfse
     ){
-       
+       print_r($nfse);
         // NFSe Web Service URL
         $wsdlUrl = "https://nfse.goiania.go.gov.br/ws/nfse.asmx";
 
@@ -184,6 +216,9 @@ class NfseService{
         SOAP;
             
         $response = $this->NfseWSReq($wsdlUrl, $soapAction, $soapRequest);
+        echo '<pre>';
+        print_r($response);
+        echo '</pre>';
         return $response;
     }
     public function consultar(){

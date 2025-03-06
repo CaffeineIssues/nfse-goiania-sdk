@@ -2,6 +2,9 @@
 require('services/CertificateService.php');
 require('services/NfseService.php');
 
+
+
+
 class NfseClient
 {
     private $certificado;
@@ -25,10 +28,6 @@ class NfseClient
         }
        // $signatureService = new SignatureService($base64Pem, $password);
        $this->generateNfse = new NfseService();
-    
-       $this->generateNfse->gerar();
-    
-
         
     }
 
@@ -37,5 +36,14 @@ class NfseClient
         return $this->homologacao ? 'hom' : 'prod';
     }
 
+    public function gerarNfse(
+        $dadosNfse
+    )
+    {
+        $nfse = new Nfse($dadosNfse);
+        return $this->generateNfse->gerar(
+            $nfse
+        );
+    }
    
 }
