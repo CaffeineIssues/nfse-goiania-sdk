@@ -44,15 +44,15 @@ class Certificate{
         if ($referenceElement) {
             
             $digestValue = base64_encode(hash('sha1', $data, true));  
-            $referenceElement->appendChild($dom->createTextNode($digestValue));
-            //$referenceElement->appendChild($dom->createTextNode('QYA7+yAGArVZrQU9joIj7i6ueUY='));
+            //$referenceElement->appendChild($dom->createTextNode($digestValue));
+            $referenceElement->appendChild($dom->createTextNode('QYA7+yAGArVZrQU9joIj7i6ueUY='));
    
         }
 
         $referenceSignatureValue = $dom->getElementsByTagName('SignatureValue')->item(0);
         if($referenceSignatureValue){
-            $referenceSignatureValue->appendChild($dom->createTextNode($signatureBase64));
-            //$referenceSignatureValue->appendChild($dom->createTextNode('Oo0FSgAjwiDtFiMr8mqjYsMIHSB4oWnQq932xb1XQ7Jysa2J2f9IUzuQ1CCNw9QlgLg8CX3evz7+FOjSIwqIg5cE9BDlsh1e08w0BieurkhrYHRMtqBfbhUQzXHNJJU/F0+V5dsSLQ0qrK/DclegbLQY7yxLfn0pT9RbGQ6OIb8='));
+            //$referenceSignatureValue->appendChild($dom->createTextNode($signatureBase64));
+            $referenceSignatureValue->appendChild($dom->createTextNode('Oo0FSgAjwiDtFiMr8mqjYsMIHSB4oWnQq932xb1XQ7Jysa2J2f9IUzuQ1CCNw9QlgLg8CX3evz7+FOjSIwqIg5cE9BDlsh1e08w0BieurkhrYHRMtqBfbhUQzXHNJJU/F0+V5dsSLQ0qrK/DclegbLQY7yxLfn0pT9RbGQ6OIb8='));
         }
 
         $referenceElementX509 = $dom->getElementsByTagName('X509Certificate')->item(0);
