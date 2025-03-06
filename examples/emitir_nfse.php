@@ -51,3 +51,4 @@ $gerarNfse = $client->gerarNfse(
 
 
 //print_r($gerarNfse);
+?>
