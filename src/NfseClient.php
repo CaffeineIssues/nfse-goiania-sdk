@@ -9,10 +9,12 @@ class NfseClient
 {
     private $certificado;
     private $homologacao;
+    private $senha;
 
     public function __construct(array $config)
     {
         $this->certificado = isset($config['certificado']) ? $config['certificado'] : '';
+        $this->senha = isset($config['senha']) ? $config['senha'] : '';
         $this->homologacao = isset($config['homologacao']) ? (bool) $config['homologacao'] : true;
         
         $this->inicializar();
@@ -42,7 +44,9 @@ class NfseClient
     {
         $nfse = new Nfse($dadosNfse);
         return $this->generateNfse->gerar(
-            $nfse
+            $nfse,
+            $this->certificado,
+            $this->senha
         );
     }
    

@@ -2,8 +2,12 @@
 require('../src/NfseClient.php');
 
 
+$base64Pem = base64_encode(file_get_contents("certificado.pem"));
+
+
 $config = [
-    'certificado' => 'path/to/certificado.pfx',
+    'certificado' => $base64Pem,
+    'senha' => 'associacao',
     'homologacao' => true
 ];
 
@@ -13,7 +17,7 @@ $ambiente = $client->getAmbiente();
 
 $dadosNfse = [
     'numero' => 1,
-    'serie' => 'F',
+    'serie' => $ambiente ? 'TESTE' : '1',
     'tipo' => 1,
     'dataEmissao' => '2011-08-12T00:00:00',
     'status' => 1,
@@ -36,7 +40,7 @@ $dadosNfse = [
     'complementoTomador' => 1003,
     'bairroTomador' => 'CENTRO',
     'codigoMunicipioTomador' => 5208707,
-    'ufTomador' => 'GO'
+    'ufTomador' => 'GO',
 ];
 
 
@@ -45,4 +49,3 @@ $gerarNfse = $client->gerarNfse(
    $dadosNfse
 );
 
-echo "Ambiente: $ambiente\n";
