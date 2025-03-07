@@ -128,7 +128,7 @@ class NfseService{
        
         
         $xmlData = 
-        <<<XML
+       '
         <GerarNfseEnvio xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
                                 <Rps>
                                     <InfDeclaracaoPrestacaoServico xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
@@ -200,7 +200,7 @@ class NfseService{
                                     </Signature>
                                 </Rps>
                             </GerarNfseEnvio>
-        XML;
+        ';
         $signatureService = new certificate($certificado, $senha);
         //echo $xmlData;
         $signature = $signatureService->signData($xmlData, $certificado);
