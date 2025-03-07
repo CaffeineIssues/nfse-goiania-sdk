@@ -134,47 +134,47 @@ class NfseService{
                                     <InfDeclaracaoPrestacaoServico xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
                                         <Rps Id="rps1F">
                                             <IdentificacaoRps>
-                                                <Numero>$nfse->numero</Numero>
-                                                <Serie>$nfse->serie</Serie>
-                                                <Tipo>$nfse->tipo</Tipo>
+                                                <Numero></Numero>
+                                                <Serie></Serie>
+                                                <Tipo></Tipo>
                                             </IdentificacaoRps>
-                                            <DataEmissao>$nfse->dataEmissao</DataEmissao>
-                                            <Status>$nfse->status</Status>
+                                            <DataEmissao></DataEmissao>
+                                            <Status></Status>
                                         </Rps>
                                         <Servico>
                                             <Valores>
-                                                <ValorServicos>$nfse->valorServicos</ValorServicos>
-                                                <ValorPis>$nfse->valorPis</ValorPis>
-                                                <ValorCofins>$nfse->valorCofins</ValorCofins>
-                                                <ValorInss>$nfse->valorInss</ValorInss>
-                                                <ValorCsll>$nfse->valorCsll</ValorCsll>
-                                                <DescontoIncondicionado>$nfse->descontoIncondicionado</DescontoIncondicionado>
+                                                <ValorServicos></ValorServicos>
+                                                <ValorPis></ValorPis>
+                                                <ValorCofins></ValorCofins>
+                                                <ValorInss></ValorInss>
+                                                <ValorCsll></ValorCsll>
+                                                <DescontoIncondicionado></DescontoIncondicionado>
                                             </Valores>
-                                            <CodigoTributacaoMunicipio>$nfse->codigoTributacaoMunicipio</CodigoTributacaoMunicipio>
-                                            <Discriminacao>$nfse->discriminacao</Discriminacao>
-                                            <CodigoMunicipio>$nfse->codigoMunicipio</CodigoMunicipio>
+                                            <CodigoTributacaoMunicipio></CodigoTributacaoMunicipio>
+                                            <Discriminacao></Discriminacao>
+                                            <CodigoMunicipio></CodigoMunicipio>
                                         </Servico>
                                         <Prestador>
                                             <CpfCnpj>
-                                                <Cpf>$nfse->cpfCnpjPrestador</Cpf>
+                                                <Cpf></Cpf>
                                             </CpfCnpj>
-                                            <InscricaoMunicipal>$nfse->inscricaoMunicipalPrestador</InscricaoMunicipal>
+                                            <InscricaoMunicipal></InscricaoMunicipal>
                                         </Prestador>
                                         <Tomador>
                                             <IdentificacaoTomador>
                                                 <CpfCnpj>
-                                                    <Cpf>$nfse->cpfCnpjTomador</Cpf>
+                                                    <Cpf></Cpf>
                                                 </CpfCnpj>
-                                                <InscricaoMunicipal>$nfse->inscricaoMunicipalTomador</InscricaoMunicipal>
+                                                <InscricaoMunicipal></InscricaoMunicipal>
                                             </IdentificacaoTomador>
-                                            <RazaoSocial>$nfse->razaoSocialTomador</RazaoSocial>
+                                            <RazaoSocial></RazaoSocial>
                                             <Endereco>
-                                                <Endereco>$nfse->enderecoTomador</Endereco>
-                                                <Numero>$nfse->numeroTomador</Numero>
-                                                <Complemento>$nfse->complementoTomador</Complemento>
-                                                <Bairro>$nfse->bairroTomador</Bairro>
-                                                <CodigoMunicipio>$nfse->codigoMunicipioTomador</CodigoMunicipio>
-                                                <Uf>$nfse->ufTomador</Uf>
+                                                <Endereco></Endereco>
+                                                <Numero></Numero>
+                                                <Complemento></Complemento>
+                                                <Bairro></Bairro>
+                                                <CodigoMunicipio></CodigoMunicipio>
+                                                <Uf></Uf>
                                             </Endereco>
                                         </Tomador>
                                     </InfDeclaracaoPrestacaoServico>
