@@ -221,7 +221,7 @@ class NfseService{
         SOAP;
             
         $response = $this->NfseWSReq($wsdlUrl, $soapAction, $soapRequest);
-        //print_r($response);
+        print_r($response);
         return $response;
     }
   
