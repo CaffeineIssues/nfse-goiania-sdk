@@ -134,47 +134,47 @@ class NfseService{
                                     <InfDeclaracaoPrestacaoServico xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
                                         <Rps Id="rps1F">
                                             <IdentificacaoRps>
-                                                <Numero></Numero>
-                                                <Serie></Serie>
-                                                <Tipo></Tipo>
+                                                <Numero>$nfse->numero</Numero>
+                                                <Serie>$nfse->serie</Serie>
+                                                <Tipo>$nfse->tipo</Tipo>
                                             </IdentificacaoRps>
-                                            <DataEmissao></DataEmissao>
-                                            <Status></Status>
+                                            <DataEmissao>$nfse->dataEmissao</DataEmissao>
+                                            <Status>$nfse->status</Status>
                                         </Rps>
                                         <Servico>
                                             <Valores>
-                                                <ValorServicos></ValorServicos>
-                                                <ValorPis></ValorPis>
-                                                <ValorCofins></ValorCofins>
-                                                <ValorInss></ValorInss>
-                                                <ValorCsll></ValorCsll>
-                                                <DescontoIncondicionado></DescontoIncondicionado>
+                                                <ValorServicos>$nfse->valorServicos</ValorServicos>
+                                                <ValorPis>$nfse->valorPis</ValorPis>
+                                                <ValorCofins>$nfse->valorCofins</ValorCofins>
+                                                <ValorInss>$nfse->valorInss</ValorInss>
+                                                <ValorCsll>$nfse->valorCsll</ValorCsll>
+                                                <DescontoIncondicionado>$nfse->descontoIncondicionado</DescontoIncondicionado>
                                             </Valores>
-                                            <CodigoTributacaoMunicipio></CodigoTributacaoMunicipio>
-                                            <Discriminacao></Discriminacao>
-                                            <CodigoMunicipio></CodigoMunicipio>
+                                            <CodigoTributacaoMunicipio>$nfse->codigoTributacaoMunicipio</CodigoTributacaoMunicipio>
+                                            <Discriminacao>$nfse->discriminacao</Discriminacao>
+                                            <CodigoMunicipio>$nfse->codigoMunicipio</CodigoMunicipio>
                                         </Servico>
                                         <Prestador>
                                             <CpfCnpj>
-                                                <Cpf></Cpf>
+                                                <Cpf>$nfse->cpfCnpjPrestador</Cpf>
                                             </CpfCnpj>
-                                            <InscricaoMunicipal></InscricaoMunicipal>
+                                            <InscricaoMunicipal>$nfse->inscricaoMunicipalPrestador</InscricaoMunicipal>
                                         </Prestador>
                                         <Tomador>
                                             <IdentificacaoTomador>
                                                 <CpfCnpj>
-                                                    <Cpf></Cpf>
+                                                    <Cpf>$nfse->cpfCnpjTomador</Cpf>
                                                 </CpfCnpj>
-                                                <InscricaoMunicipal></InscricaoMunicipal>
+                                                <InscricaoMunicipal>$nfse->inscricaoMunicipalTomador</InscricaoMunicipal>
                                             </IdentificacaoTomador>
-                                            <RazaoSocial></RazaoSocial>
+                                            <RazaoSocial>$nfse->razaoSocialTomador</RazaoSocial>
                                             <Endereco>
-                                                <Endereco></Endereco>
-                                                <Numero></Numero>
-                                                <Complemento></Complemento>
-                                                <Bairro></Bairro>
-                                                <CodigoMunicipio></CodigoMunicipio>
-                                                <Uf></Uf>
+                                                <Endereco>$nfse->enderecoTomador</Endereco>
+                                                <Numero>$nfse->numeroTomador</Numero>
+                                                <Complemento>$nfse->complementoTomador</Complemento>
+                                                <Bairro>$nfse->bairroTomador</Bairro>
+                                                <CodigoMunicipio>$nfse->codigoMunicipioTomador</CodigoMunicipio>
+                                                <Uf>$nfse->ufTomador</Uf>
                                             </Endereco>
                                         </Tomador>
                                     </InfDeclaracaoPrestacaoServico>
@@ -205,7 +205,7 @@ class NfseService{
         //echo $xmlData;
         $signature = $signatureService->signData($xmlData, $certificado);
         $soapRequest = 
-        <<<SOAP
+        '
         <?xml version="1.0" encoding="UTF-8"?>
             <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
                 <soap12:Body>
@@ -218,10 +218,10 @@ class NfseService{
                     </GerarNfse>
                 </soap12:Body>
             </soap12:Envelope>
-        SOAP;
+      ';
             
         $response = $this->NfseWSReq($wsdlUrl, $soapAction, $soapRequest);
-        print_r($response);
+        //print_r($response);
         return $response;
     }
   
