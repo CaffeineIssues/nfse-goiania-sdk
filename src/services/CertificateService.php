@@ -49,10 +49,10 @@ class Certificate{
 
       
         $signedInfoXml = '
-        <SignedInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <SignedInfo>
             <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></CanonicalizationMethod>
             <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></SignatureMethod>
-            <Reference URI="">
+            <Reference URI="#rps1F">
                 <Transforms>
                     <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></Transform>
                     <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></Transform>
