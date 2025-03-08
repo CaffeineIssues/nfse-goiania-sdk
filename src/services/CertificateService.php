@@ -26,44 +26,78 @@ class Certificate{
         $this->privateKey = $privateKey;
     }
 
-    public function signData($data, $X509Certificate)
-{
-    
-    if (openssl_sign($data, $signature, $this->privateKey, OPENSSL_ALGO_SHA256)) {
-       
-        $signatureBase64 = base64_encode($signature);
+    public function signData($xml, $certificadoBase64)
+    {
+        if (!$this->privateKey) {
+            throw new \Exception("Private key is not set or invalid.");
+        }
+
+   
+        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc->loadXML($xml);
+        $doc->preserveWhiteSpace = false;
+        $doc->formatOutput = false;
+
+  
+        $rpsNode = $doc->getElementsByTagName("Rps")->item(0);
+        if (!$rpsNode) {
+            throw new \Exception("Rps element not found.");
+        }
+
+        $canonicalData = $rpsNode->C14N(true, false);
+        $digestValue = base64_encode(hash('sha1', $canonicalData, true));
 
       
-        $dom = new \DOMDocument('1.0', 'utf-8');
-        $dom->formatOutput = false;
-        $dom->preserveWhiteSpace = false;
-        $dom->loadXML($data);
+        $signedInfoXml = '
+        <SignedInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+            <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></CanonicalizationMethod>
+            <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></SignatureMethod>
+            <Reference URI="">
+                <Transforms>
+                    <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></Transform>
+                    <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></Transform>
+                </Transforms>
+                <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></DigestMethod>
+                <DigestValue>' . $digestValue . '</DigestValue>
+            </Reference>
+        </SignedInfo>';
+    
 
-        
-        $referenceElement = $dom->getElementsByTagName('Reference')->item(0);
-        if ($referenceElement) {
-            
-            $digestValue = base64_encode(hash('sha1', $data, true));  
-            $referenceElement->appendChild($dom->createTextNode($digestValue));
-            //$referenceElement->appendChild($dom->createTextNode('QYA7+yAGArVZrQU9joIj7i6ueUY='));
-   
+        if (!openssl_sign($signedInfoXml, $signature, $this->privateKey, OPENSSL_ALGO_SHA1)) {
+            throw new \Exception("Failed to sign the XML.");
         }
 
-        $referenceSignatureValue = $dom->getElementsByTagName('SignatureValue')->item(0);
-        if($referenceSignatureValue){
-            $referenceSignatureValue->appendChild($dom->createTextNode($signatureBase64));
-            //$referenceSignatureValue->appendChild($dom->createTextNode('Oo0FSgAjwiDtFiMr8mqjYsMIHSB4oWnQq932xb1XQ7Jysa2J2f9IUzuQ1CCNw9QlgLg8CX3evz7+FOjSIwqIg5cE9BDlsh1e08w0BieurkhrYHRMtqBfbhUQzXHNJJU/F0+V5dsSLQ0qrK/DclegbLQY7yxLfn0pT9RbGQ6OIb8='));
-        }
+        $signatureValue = base64_encode($signature);
 
        
-
+        $signatureXml = '
+        <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+            ' . $signedInfoXml . '
+            <SignatureValue>' . $signatureValue . '</SignatureValue>
+            <KeyInfo>
+                <X509Data>
+                    <X509Certificate>' . $certificadoBase64 . '</X509Certificate>
+                </X509Data>
+            </KeyInfo>
+        </Signature>';
+       
+        $signatureDom = new DOMDocument();
+        $signatureDom->loadXML($signatureXml, LIBXML_NOXMLDECL); 
         
-        //print_r($dom->saveXML());
-        return $dom->saveXML();
-    } else {
-        throw new \Exception("Unable to sign the data.");
+        
+        foreach ($signatureDom->getElementsByTagName('*') as $node) {
+            if ($node->nodeType === XML_ELEMENT_NODE && $node->childNodes->length === 0) {
+               
+                $node->appendChild($signatureDom->createTextNode(''));
+            }
+        }
+        
+     
+        $importedNode = $doc->importNode($signatureDom->documentElement, true);
+        $rpsNode->appendChild($importedNode);
+        //print_r($doc->saveXML());
+        return $doc->saveXML();
     }
-}
 
     public function __destruct()
     {

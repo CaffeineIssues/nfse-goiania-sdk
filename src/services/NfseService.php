@@ -128,7 +128,7 @@ class NfseService{
        
         
         $xmlData = 
-       '<GerarNfseEnvio xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
+            '<?xml version="1.0" encoding="utf-8"?>
             <Rps>
                 <InfDeclaracaoPrestacaoServico xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
                     <Rps Id="rps1F">
@@ -177,31 +177,13 @@ class NfseService{
                         </Endereco>
                     </Tomador>
                 </InfDeclaracaoPrestacaoServico>
-                <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
-                    <SignedInfo>
-                        <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
-                        <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
-                        <Reference URI="#rps1F">
-                            <Transforms>
-                                <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
-                                <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
-                            </Transforms>
-                            <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-                            <DigestValue></DigestValue>
-                        </Reference>
-                    </SignedInfo>
-                    <SignatureValue></SignatureValue>
-                    <KeyInfo>
-                        <X509Data>
-                            <X509Certificate>' . $certificado . '</X509Certificate>
-                        </X509Data>
-                    </KeyInfo>
-                </Signature>
             </Rps>
-        </GerarNfseEnvio>';
+        ';
         $signatureService = new certificate($certificado, $senha);
         //echo $xmlData;
-        $signature = $signatureService->signData($xmlData, $certificado);
+
+        $signedXml = $signatureService->signData($xmlData, $certificado);
+        //print_r($signedXml);
         $soapRequest = 
         '<?xml version="1.0" encoding="UTF-8"?>' .
         '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' .
@@ -209,10 +191,11 @@ class NfseService{
         'xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">' .
             '<soap12:Body>' .
                 '<GerarNfse xmlns="http://nfse.goiania.go.gov.br/ws/">' .
-                    '<ArquivoXML><![CDATA[' . $xmlData . ']]></ArquivoXML>' .
+                    '<ArquivoXML><![CDATA[' . $signedXml . ']]></ArquivoXML>' .
                 '</GerarNfse>' .
             '</soap12:Body>' .
         '</soap12:Envelope>';
+        print_r($soapRequest);
         $response = $this->NfseWSReq($wsdlUrl, $soapAction, $soapRequest);
         //print_r($response);
         return $response;
