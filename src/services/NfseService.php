@@ -47,6 +47,7 @@ class Nfse {
         $this->cpfCnpjPrestador = $data['cpfCnpjPrestador'];
         $this->inscricaoMunicipalPrestador = $data['inscricaoMunicipalPrestador'];
         $this->cpfCnpjTomador = $data['cpfCnpjTomador'];
+        $this->pessoa_juridica = $data['pessoa_juridica'];
         $this->inscricaoMunicipalTomador = $data['inscricaoMunicipalTomador'];
         $this->razaoSocialTomador = $data['razaoSocialTomador'];
         $this->enderecoTomador = $data['enderecoTomador'];
@@ -129,55 +130,57 @@ class NfseService{
         
         $xmlData = 
             '<?xml version="1.0" encoding="utf-8"?>
-            <Rps>
-                <InfDeclaracaoPrestacaoServico xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
-                    <Rps Id="rps1F">
-                        <IdentificacaoRps>
-                            <Numero>' . $nfse->numero . '</Numero>
-                            <Serie>' . $nfse->serie . '</Serie>
-                            <Tipo>' . $nfse->tipo . '</Tipo>
-                        </IdentificacaoRps>
-                        <DataEmissao>' . $nfse->dataEmissao . '</DataEmissao>
-                        <Status>' . $nfse->status . '</Status>
-                    </Rps>
-                    <Servico>
-                        <Valores>
-                            <ValorServicos>' . $nfse->valorServicos . '</ValorServicos>
-                            <ValorPis>' . $nfse->valorPis . '</ValorPis>
-                            <ValorCofins>' . $nfse->valorCofins . '</ValorCofins>
-                            <ValorInss>' . $nfse->valorInss . '</ValorInss>
-                            <ValorCsll>' . $nfse->valorCsll . '</ValorCsll>
-                            <DescontoIncondicionado>' . $nfse->descontoIncondicionado . '</DescontoIncondicionado>
-                        </Valores>
-                        <CodigoTributacaoMunicipio>' . $nfse->codigoTributacaoMunicipio . '</CodigoTributacaoMunicipio>
-                        <Discriminacao>' . $nfse->discriminacao . '</Discriminacao>
-                        <CodigoMunicipio>' . $nfse->codigoMunicipio . '</CodigoMunicipio>
-                    </Servico>
-                    <Prestador>
-                        <CpfCnpj>
-                            <Cpf>' . $nfse->cpfCnpjPrestador . '</Cpf>
-                        </CpfCnpj>
-                        <InscricaoMunicipal>' . $nfse->inscricaoMunicipalPrestador . '</InscricaoMunicipal>
-                    </Prestador>
-                    <Tomador>
-                        <IdentificacaoTomador>
+            <GerarNfseEnvio xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
+                <Rps>
+                    <InfDeclaracaoPrestacaoServico xmlns="http://nfse.goiania.go.gov.br/xsd/nfse_gyn_v02.xsd">
+                        <Rps Id="rps1F">
+                            <IdentificacaoRps>
+                                <Numero>' . $nfse->numero . '</Numero>
+                                <Serie>' . $nfse->serie . '</Serie>
+                                <Tipo>' . $nfse->tipo . '</Tipo>
+                            </IdentificacaoRps>
+                            <DataEmissao>' . $nfse->dataEmissao . '</DataEmissao>
+                            <Status>' . $nfse->status . '</Status>
+                        </Rps>
+                        <Servico>
+                            <Valores>
+                                <ValorServicos>' . $nfse->valorServicos . '</ValorServicos>
+                                <ValorPis>' . $nfse->valorPis . '</ValorPis>
+                                <ValorCofins>' . $nfse->valorCofins . '</ValorCofins>
+                                <ValorInss>' . $nfse->valorInss . '</ValorInss>
+                                <ValorCsll>' . $nfse->valorCsll . '</ValorCsll>
+                                <DescontoIncondicionado>' . $nfse->descontoIncondicionado . '</DescontoIncondicionado>
+                            </Valores>
+                            <CodigoTributacaoMunicipio>' . $nfse->codigoTributacaoMunicipio . '</CodigoTributacaoMunicipio>
+                            <Discriminacao>' . $nfse->discriminacao . '</Discriminacao>
+                            <CodigoMunicipio>' . $nfse->codigoMunicipio . '</CodigoMunicipio>
+                        </Servico>
+                        <Prestador>
                             <CpfCnpj>
-                                <Cpf>' . $nfse->cpfCnpjTomador . '</Cpf>
+                                <Cnpj>' . $nfse->cpfCnpjPrestador . '</Cnpj>
                             </CpfCnpj>
-                            <InscricaoMunicipal>' . $nfse->inscricaoMunicipalTomador . '</InscricaoMunicipal>
-                        </IdentificacaoTomador>
-                        <RazaoSocial>' . $nfse->razaoSocialTomador . '</RazaoSocial>
-                        <Endereco>
-                            <Endereco>' . $nfse->enderecoTomador . '</Endereco>
-                            <Numero>' . $nfse->numeroTomador . '</Numero>
-                            <Complemento>' . $nfse->complementoTomador . '</Complemento>
-                            <Bairro>' . $nfse->bairroTomador . '</Bairro>
-                            <CodigoMunicipio>' . $nfse->codigoMunicipioTomador . '</CodigoMunicipio>
-                            <Uf>' . $nfse->ufTomador . '</Uf>
-                        </Endereco>
-                    </Tomador>
-                </InfDeclaracaoPrestacaoServico>
-            </Rps>
+                            <InscricaoMunicipal>' . $nfse->inscricaoMunicipalPrestador . '</InscricaoMunicipal>
+                        </Prestador>
+                        <Tomador>
+                            <IdentificacaoTomador>
+                                <CpfCnpj>
+                                     <' . ($nfse->pessoa_juridica ? 'Cnpj' : 'Cpf') . '>' . $nfse->cpfCnpjTomador . '</' . ($nfse->pessoa_juridica ? 'Cnpj' : 'Cpf') . '>
+                                </CpfCnpj>
+                                <InscricaoMunicipal>' . $nfse->inscricaoMunicipalTomador . '</InscricaoMunicipal>
+                            </IdentificacaoTomador>
+                            <RazaoSocial>' . $nfse->razaoSocialTomador . '</RazaoSocial>
+                            <Endereco>
+                                <Endereco>' . $nfse->enderecoTomador . '</Endereco>
+                                <Numero>' . $nfse->numeroTomador . '</Numero>
+                                <Complemento>' . $nfse->complementoTomador . '</Complemento>
+                                <Bairro>' . $nfse->bairroTomador . '</Bairro>
+                                <CodigoMunicipio>' . $nfse->codigoMunicipioTomador . '</CodigoMunicipio>
+                                <Uf>' . $nfse->ufTomador . '</Uf>
+                            </Endereco>
+                        </Tomador>
+                    </InfDeclaracaoPrestacaoServico>
+                </Rps>
+            </GerarNfseEnvio>
         ';
         $signatureService = new certificate($certificado, $senha);
         //echo $xmlData;
@@ -191,7 +194,7 @@ class NfseService{
         'xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">' .
             '<soap12:Body>' .
                 '<GerarNfse xmlns="http://nfse.goiania.go.gov.br/ws/">' .
-                    '<ArquivoXML><![CDATA[' . $signedXml . ']]></ArquivoXML>' .
+                    '<ArquivoXML><![CDATA['. $signedXml . ']]></ArquivoXML>' .
                 '</GerarNfse>' .
             '</soap12:Body>' .
         '</soap12:Envelope>';
